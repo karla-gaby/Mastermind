@@ -1,0 +1,14 @@
+node_modules/
+__pycache__/
+**/__pycache__/
+**/*.pyc
+**/*.pyd
+*.pyc
+.venv/
+venv/
+backend/.venv/
+backend/mastermind.db
+.claude/
+.pytest_cache/
+dist/
+*.egg-info/
