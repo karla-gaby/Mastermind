@@ -1,0 +1,59 @@
+<div class="pagina-ranking">
+  <div class="cabecalho-pagina">
+    <h2>Ranking Global</h2>
+    <a class="botao botao-contorno botao-pequeno" routerLink="/painel">Voltar ao Painel</a>
+  </div>
+
+  @if (carregando()) {
+    <p class="texto-mudo">Carregando ranking…</p>
+  } @else if (erro()) {
+    <div class="alerta alerta-erro">{{ erro() }}</div>
+  } @else if (entradas().length === 0) {
+    <div class="vazio cartao">
+      <p>Nenhuma pontuação ainda. Seja o primeiro a vencer!</p>
+      <a class="botao botao-primario" routerLink="/painel">Jogar Agora</a>
+    </div>
+  } @else {
+    @if (entradas().length >= 3) {
+      <div class="podio">
+        @for (e of entradas().slice(0, 3); track e.posicao) {
+          <div class="item-podio cartao" [class]="'posicao-' + e.posicao">
+            <div class="medalha">{{ medalha(e.posicao) }}</div>
+            <div class="podio-usuario">{{ e.nome_usuario }}</div>
+            <div class="podio-pontuacao">{{ e.pontuacao }}</div>
+            <div class="podio-rotulo">pontos</div>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="tabela-wrap cartao">
+      <table>
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Jogador</th>
+            <th>Pontuação</th>
+            <th>Tentativas</th>
+            <th>Duração</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entrada of entradas(); track entrada.posicao) {
+            <tr [class.top3]="entrada.posicao <= 3">
+              <td class="celula-posicao">
+                {{ medalha(entrada.posicao) || entrada.posicao }}
+              </td>
+              <td class="celula-usuario">{{ entrada.nome_usuario }}</td>
+              <td class="celula-pontuacao">{{ entrada.pontuacao }}</td>
+              <td>{{ entrada.total_tentativas }}</td>
+              <td>{{ formatarDuracao(entrada.duracao_segundos) }}</td>
+              <td>{{ entrada.finalizado_em ? (entrada.finalizado_em | date:'short') : '—' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

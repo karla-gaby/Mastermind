@@ -1,0 +1,108 @@
+.painel {
+  max-width: 900px;
+  margin: 0 auto;
+
+  .cabecalho-painel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 2rem;
+    padding-top: .5rem;
+
+    .titulo-jogo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+
+      .titulo-icone {
+        font-size: 2rem;
+        color: var(--secondary);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 2px;
+      }
+    }
+
+    .btn-sair {
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  .boas-vindas {
+    margin-bottom: 2rem;
+    h2 { font-size: 1.6rem; span { color: var(--primary); } }
+    p  { color: var(--text-muted); margin-top: .25rem; }
+  }
+
+  .linha-estatisticas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .card-estatistica {
+      text-align: center;
+      .valor-estatistica { font-size: 2rem; font-weight: 700; color: var(--primary); }
+      .rotulo-estatistica { font-size: .85rem; color: var(--text-muted); margin-top: .25rem; }
+    }
+  }
+
+  .banner-continuar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .acoes {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .historico {
+    h3 { margin-bottom: 1rem; font-size: 1.1rem; }
+
+    .texto-mudo { color: var(--text-muted); font-size: .9rem; }
+
+    .acoes-jogo { display: flex; gap: .4rem; }
+
+    .tabela-wrap { padding: 0; overflow: hidden; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: .75rem 1rem;
+        text-align: left;
+        font-size: .9rem;
+      }
+
+      th { color: var(--text-muted); font-weight: 600; border-bottom: 1px solid rgba(255,255,255,.08); }
+      tr:not(:last-child) td { border-bottom: 1px solid rgba(255,255,255,.05); }
+
+      code { background: rgba(255,255,255,.08); padding: .2rem .4rem; border-radius: 4px; font-size: .85rem; }
+
+      .badge {
+        padding: .2rem .6rem;
+        border-radius: 20px;
+        font-size: .78rem;
+        font-weight: 600;
+        &.ativo  { background: rgba(255,152,0,.2);  color: var(--warning); }
+        &.ganhou { background: rgba(76,175,80,.2);  color: var(--success); }
+        &.perdeu { background: rgba(244,67,54,.2);  color: var(--error); }
+      }
+    }
+  }
+}
+@media (max-width: 600px) {
+  .linha-estatisticas { grid-template-columns: repeat(2, 1fr); }
+  .acoes { flex-direction: column; }
+}

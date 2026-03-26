@@ -1,0 +1,61 @@
+.pagina-entrar {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-entrar {
+  width: 100%;
+  max-width: 400px;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    margin-bottom: 1rem;
+
+    .pino {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      &.r { background: var(--cor-R); }
+      &.g { background: var(--cor-G); }
+      &.b { background: var(--cor-B); }
+      &.y { background: var(--cor-Y); }
+    }
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+  }
+
+  .abas {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(255,255,255,.1);
+
+    button {
+      flex: 1;
+      padding: .6rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 600;
+      transition: color .2s;
+
+      &.ativo {
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+        margin-bottom: -2px;
+      }
+    }
+  }
+
+  .alerta { margin-bottom: 1rem; }
+}

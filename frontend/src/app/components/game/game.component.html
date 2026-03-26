@@ -1,0 +1,132 @@
+<div class="pagina-jogo">
+
+  <div class="cabecalho-pagina">
+    <button class="botao botao-contorno btn-voltar" (click)="irParaPainel()">&#8592; Sair do Jogo</button>
+  </div>
+
+  @if (status() === 'ganhou') {
+    <div class="banner-resultado ganhou">
+      <div class="icone-resultado">&#127881;</div>
+      <h2>Parabéns!!! Você decifrou o código!</h2>
+      <p>Pontuação: <strong>{{ pontuacao() }}</strong> &bull; Tentativas: {{ totalTentativas() }}</p>
+      <div class="acoes-resultado">
+        <button class="botao botao-primario" (click)="irParaPainel()">Novo Jogo</button>
+        <a class="botao botao-contorno" routerLink="/ranking">Ver Ranking</a>
+      </div>
+    </div>
+  }
+
+  @if (status() === 'perdeu') {
+    <div class="banner-resultado perdeu">
+      <div class="icone-resultado">&#128546;</div>
+      <h2>Fim de Jogo!</h2>
+      <p>Você usou todas tentativas. Tente novamente!</p>
+      <button class="botao botao-primario" (click)="irParaPainel()">Tentar Novamente</button>
+    </div>
+  }
+  <div class="layout-jogo">
+    <div class="tabuleiro cartao">
+      <div class="cabecalho-tabuleiro">
+        <span class="info-tentativa">
+          Tentativa {{ totalTentativas() + (status() === 'ativo' ? 1 : 0) }} / {{ MAX_TENTATIVAS }}
+        </span>
+        <span class="badge-status" [class]="status()">{{ status() }}</span>
+      </div>
+
+      <div class="linhas">
+        @for (indiceLinha of arrayLinhas(); track indiceLinha) {
+          <div class="linha" [class.atual]="ehLinhaAtual(indiceLinha)">
+            <span class="num-linha">{{ MAX_TENTATIVAS - indiceLinha }}</span>
+
+            @if (buscarTentativa(indiceLinha); as tentativa) {
+              <div class="pinos">
+                @for (cor of tentativa.tentativa; track $index) {
+                  <div class="pino" [class]="classeCor(cor)"></div>
+                }
+              </div>
+              <div class="feedback">
+                @for (_ of arrayPinos(tentativa.exatos); track $index) {
+                  <div class="pino-fb exato" title="Posição correta"></div>
+                }
+                @for (_ of arrayPinos(tentativa.cores_certas); track $index) {
+                  <div class="pino-fb cor-certa" title="Cor certa, posição errada"></div>
+                }
+                @for (_ of arrayPinos(4 - tentativa.exatos - tentativa.cores_certas); track $index) {
+                  <div class="pino-fb erro"></div>
+                }
+              </div>
+
+            } @else if (ehLinhaAtual(indiceLinha)) {
+              <div class="pinos pinos-entrada">
+                @for (item of slotsComIndice(); track item.indice) {
+                  <div
+                    class="pino pino-entrada"
+                    [class]="classeCor(item.cor)"
+                    [class.selecionado]="slotSelecionado() === item.indice"
+                    (click)="selecionarSlot(item.indice)"
+                  >
+                    @if (item.cor !== null) {
+                      <button class="btn-limpar" (click)="limparSlot(item.indice); $event.stopPropagation()">×</button>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="feedback">
+                @for (_ of [1,2,3,4]; track $index) {
+                  <div class="pino-fb erro"></div>
+                }
+              </div>
+
+            } @else {
+              <div class="pinos">
+                @for (_ of [1,2,3,4]; track $index) {
+                  <div class="pino vazio"></div>
+                }
+              </div>
+              <div class="feedback">
+                @for (_ of [1,2,3,4]; track $index) {
+                  <div class="pino-fb erro"></div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (status() === 'ativo') {
+      <div class="controles cartao">
+        <h3>Escolha uma cor</h3>
+        <p class="dica">Clique em um slot e depois escolha a cor abaixo.</p>
+        <div class="paleta-cores">
+          @for (c of CORES; track c) {
+            <button
+              class="btn-cor"
+              [class]="'cor-' + c"
+              [title]="ROTULOS_COR[c]"
+              (click)="selecionarCor(c)"
+            >
+              {{ ROTULOS_COR[c] }}
+            </button>
+          }
+        </div>
+
+        @if (erro()) {
+          <div class="alerta alerta-erro">{{ erro() }}</div>
+        }
+        <button
+          class="botao botao-primario botao-completo btn-enviar"
+          [disabled]="!chuteCompleto || carregando()"
+          (click)="enviarTentativa()"
+        >
+          {{ carregando() ? 'Verificando…' : 'Enviar Tentativa' }}
+        </button>
+        <div class="legenda">
+          <div><span class="pino-fb exato"></span> Posição correta</div>
+          <div><span class="pino-fb cor-certa"></span> Cor certa, posição errada</div>
+          <div><span class="pino-fb erro"></span> Não está no código</div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

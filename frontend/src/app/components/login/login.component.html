@@ -1,0 +1,83 @@
+<div class="pagina-entrar">
+  <div class="card-entrar cartao">
+    <div class="logo">
+      <span class="pino r"></span><span class="pino g"></span>
+      <span class="pino b"></span><span class="pino y"></span>
+    </div>
+    <h1>Mastermind</h1>
+
+    <div class="abas">
+      <button [class.ativo]="modo === 'entrar'"    (click)="alternarModo('entrar')">Entrar</button>
+      <button [class.ativo]="modo === 'registrar'" (click)="alternarModo('registrar')">Cadastrar</button>
+    </div>
+
+    @if (erro) {
+      <div class="alerta alerta-erro">{{ erro }}</div>
+    }
+
+    @if (modo === 'entrar') {
+      <form [formGroup]="formularioEntrada" (ngSubmit)="aoEntrar()" novalidate>
+        <div class="grupo-formulario">
+          <label>Usuário ou E-mail</label>
+          <input type="text" formControlName="nome_usuario" placeholder="Digite seu usuário ou e-mail">
+          @if (erroCampo(formularioEntrada, 'nome_usuario', 'required')) {
+            <span class="msg-erro">Campo obrigatório</span>
+          }
+        </div>
+
+        <div class="grupo-formulario">
+          <label>Senha</label>
+          <input type="password" formControlName="senha" placeholder="Digite sua senha">
+          @if (erroCampo(formularioEntrada, 'senha', 'required')) {
+            <span class="msg-erro">Campo obrigatório</span>
+          }
+        </div>
+
+        <button type="submit" class="botao botao-primario botao-completo" [disabled]="carregando">
+          {{ carregando ? 'Entrando…' : 'Entrar' }}
+        </button>
+      </form>
+    }
+
+    @if (modo === 'registrar') {
+      <form [formGroup]="formularioRegistro" (ngSubmit)="aoRegistrar()" novalidate>
+        <div class="grupo-formulario">
+          <label>Nome de Usuário</label>
+          <input type="text" formControlName="nome_usuario" placeholder="Escolha um nome de usuário">
+          @if (erroCampo(formularioRegistro, 'nome_usuario', 'required')) {
+            <span class="msg-erro">Campo obrigatório</span>
+          }
+          @if (erroCampo(formularioRegistro, 'nome_usuario', 'minlength')) {
+            <span class="msg-erro">Mínimo de 3 caracteres</span>
+          }
+        </div>
+
+        <div class="grupo-formulario">
+          <label>E-mail</label>
+          <input type="email" formControlName="email" placeholder="seu@email.com">
+          @if (erroCampo(formularioRegistro, 'email', 'required')) {
+            <span class="msg-erro">Campo obrigatório</span>
+          }
+          @if (erroCampo(formularioRegistro, 'email', 'email')) {
+            <span class="msg-erro">E-mail inválido</span>
+          }
+        </div>
+
+        <div class="grupo-formulario">
+          <label>Senha</label>
+          <input type="password" formControlName="senha" placeholder="Mínimo 6 caracteres">
+          @if (erroCampo(formularioRegistro, 'senha', 'required')) {
+            <span class="msg-erro">Campo obrigatório</span>
+          }
+          @if (erroCampo(formularioRegistro, 'senha', 'minlength')) {
+            <span class="msg-erro">Mínimo de 6 caracteres</span>
+          }
+        </div>
+
+        <button type="submit" class="botao botao-primario botao-completo" [disabled]="carregando">
+          {{ carregando ? 'Criando conta…' : 'Criar Conta' }}
+        </button>
+      </form>
+    }
+  </div>
+</div>

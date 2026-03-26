@@ -1,0 +1,90 @@
+<div class="painel">
+  <div class="cabecalho-painel">
+    <div class="titulo-jogo">
+      <span class="titulo-icone">&#9632;</span>
+      <h1>Mastermind</h1>
+    </div>
+    <button class="botao botao-contorno botao-pequeno btn-sair" (click)="autenticacao.sair()">Sair</button>
+  </div>
+
+  <div class="boas-vindas">
+    <h2>Bem-vindo(a), <span>{{ usuario()?.nome_usuario }}</span>!</h2>
+    <p>Pronto(a) para decifrar o código?</p>
+  </div>
+  <div class="linha-estatisticas">
+    <div class="card-estatistica cartao">
+      <div class="valor-estatistica">{{ jogos().length }}</div>
+      <div class="rotulo-estatistica">Total de Jogos</div>
+    </div>
+    <div class="card-estatistica cartao">
+      <div class="valor-estatistica">{{ totalGanhos }}</div>
+      <div class="rotulo-estatistica">Vitórias</div>
+    </div>
+    <div class="card-estatistica cartao">
+      <div class="valor-estatistica">{{ melhorPontuacao }}</div>
+      <div class="rotulo-estatistica">Melhor Pontuação</div>
+    </div>
+  </div>
+
+  @if (erro()) {
+    <div class="alerta alerta-erro">{{ erro() }}</div>
+  }
+
+  @if (jogoAtivo) {
+    <div class="alerta alerta-info banner-continuar">
+      Jogo em andamento!
+      <button class="botao botao-primario botao-pequeno" (click)="continuarJogo(jogoAtivo!.id)">Continuar</button>
+    </div>
+  }
+
+  <div class="acoes">
+    <button class="botao botao-primario" (click)="iniciarNovoJogo()">Novo Jogo</button>
+    <a class="botao botao-contorno" routerLink="/ranking">Ver Ranking</a>
+  </div>
+
+  <section class="historico">
+    <h3>Partidas Recentes</h3>
+
+    @if (carregando()) {
+      <p class="texto-mudo">Carregando histórico…</p>
+    } @else if (jogos().length === 0) {
+      <p class="texto-mudo">Nenhuma partida ainda. Comece seu primeiro jogo!</p>
+    } @else {
+      <div class="tabela-wrap cartao">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Código</th>
+              <th>Status</th>
+              <th>Tentativas</th>
+              <th>Pontuação</th>
+              <th>Duração</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (jogo of jogos(); track jogo.id; let i = $index) {
+              <tr>
+                <td>{{ i + 1 }}</td>
+                <td><code>{{ jogo.codigo }}</code></td>
+                <td><span class="badge" [class]="jogo.status">{{ traduzirStatus(jogo.status) }}</span></td>
+                <td>{{ jogo.total_tentativas }} / 10</td>
+                <td>{{ jogo.pontuacao }}</td>
+                <td>{{ jogo.duracao_segundos ? (jogo.duracao_segundos | number:'1.0-0') + 's' : '—' }}</td>
+                <td>
+                  @if (jogo.status === 'ativo') {
+                    <div class="acoes-jogo">
+                      <button class="botao botao-pequeno botao-primario" (click)="continuarJogo(jogo.id)">Continuar</button>
+                      <button class="botao botao-pequeno botao-perigo" (click)="cancelarJogo(jogo.id)">Cancelar</button>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>
